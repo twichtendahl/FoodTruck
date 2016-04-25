@@ -19,6 +19,11 @@ include 'includes/common.php';
 <?php
     
 if(isset($_POST['submit_order'])) { //order was submitted
+// Dummy code assumes only one line item and item=Gyros
+    $lineItem = new Line_Item($_POST['item'], array($_POST['gyros_toppings']), $_POST['quantity']);
+    echo '<pre>' . $lineItem . '</pre>';
+    $order = new Order(array($lineItem), 'Bill');
+    echo "<p>Subtotal: {$order->getSubtotal()}<br/>Total: {$order->getTotal()}</p>";
     
 }else{ //show form
     echo '
