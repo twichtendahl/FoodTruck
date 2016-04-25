@@ -1,75 +1,91 @@
-<?php 
+<?php
 //order_form.php
 
-if(isset($_POST['temp']))
-{
-    $output = "";
-  	$result = 0.0;
-  
-  	// Here we need our if/else conditions to determine which type of conversion we're conducting.
-  	// Each case should store the calculated value in the $result variable
+include 'includes/common.php';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rea's Order Form</title>
+</head>
+<body>
+   <header>
+       <h1>Rea's Mediterranean Specialties</h1>
+       <h2>Place an Order</h2>
+   </header>
+   
+<?php
     
-    if($_POST['Item'] == "C" && $_POST['convertType'] == "F")
-    {
-        $result = ($_POST['temp'] * 1.8 + 32);
-    }
+if(isset($_POST['submit_order'])) { //order was submitted
     
-    /*
-	$output = $_POST['temp'].'° '.$_POST['Item'].' is equivalent to '.round($result, 2).'° '.$_POST['convertType'];
-  	echo $output;
-    */
-  
-}else{
+}else{ //show form
     echo '
-    <form action="P2.php" method="post">
+    <form action="order_form.php" method="post">
     
-        <select name="Order Item">
-            <option value="title">Items</option>
-            <option value="G">Gyros</option>
-            <option value="S">Shawarma</option>
-            <option value="SK">Shish Kabob</option>
-            <option value="BG">Baba Ganoush</option>
-            <option value="HP">Hummus Plate</option>
-            <option value="TB">Tabouleh</option>
-            <option value="FP">Falafel Plate</option>
-            <option value="HT">Hot Tea</option>
-            <option value="L">Lemonade</option>
-            <option value="K">Kefir</option>
-            <option value="GS">Grape Soda</option>
-            <option value="B">Baklava</option>
-            <option value="K">Kunafeh</option>
-            <option value="BA">Basbousa</option>
+        <select id="item" name="item">
+            <option value="title">Select Menu Item</option>
+            <option value="gyros">Gyros</option>
+            <option value="shawarma">Shawarma</option>
+            <option value="shish_kabob">Shish Kabob</option>
+            <option value="baba_ganoush">Baba Ganoush</option>
+            <option value="hummus_plate">Hummus Plate</option>
+            <option value="tabouleh">Tabouleh</option>
+            <option value="falafel_plate">Falafel Plate</option>
+            <option value="hot_tea">Hot Tea</option>
+            <option value="lemonade">Lemonade</option>
+            <option value="kefir">Kefir</option>
+            <option value="grape_soda">Grape Soda</option>
+            <option value="baklava">Baklava</option>
+            <option value="kunafeh">Kunafeh</option>
+            <option value="basbousa">Basbousa</option>
         </select>
     
-        <select name="Protein">
+        <select id="gyros_protein" name="gyros_protein">
             <option value="title">Protein</option>
-            <option value="L">Lamb</option>
-            <option value="C">Chicken</option>
-            <option value="F">Falafel</option>
-            <option value="E">Eggplant</option>
+            <option value="lamb">Lamb</option>
+            <option value="chicken">Chicken</option>
+            <option value="falafel">Falafel</option>
+            <option value="eggplant">Eggplant</option>
         </select>
         
-        <select name="Toppings" value="Toppings">
+        <select id="shawarma_protein" name="shawarma_protein">
+            <option value="title">Protein</option>
+            <option value="lamb">Lamb</option>
+            <option value="chicken">Chicken</option>
+            <option value="beef">Beef</option>
+        </select>
+        
+        <select id="gyros_toppings" name="gyros_toppings">
             <option value="title">Toppings</option>
-            <option value="T">Tahini</option>
-            <option value="RG">Roasted Garlic</option>
-            <option value="RB">Roasted Bell Pepper</option>
-            <option value="H">Hummus</option>
+            <option value="tahini">Tahini</option>
+            <option value="roasted_garlic">Roasted Garlic</option>
+            <option value="bell_pepper">Roasted Bell Pepper</option>
         </select>
         
-        <input type="number" step=1 min="1" name="quantity"/>
+        <select id="shawarma_toppings" name="shawarma_toppings">
+            <option value="title">Toppings</option>
+            <option value="hummus">Hummus</option>
+            <option value="roasted_garlic">Roasted Garlic</option>
+            <option value="bell_pepper">Roasted Bell Pepper</option>
+        </select>
         
-        <p><input type=submit name="Add to Order" value="Add to Order"/></p>
-        <p><input type=submit name="Remove from Order" value="X"/></p>
-        <p><input type=submit name="Submit Order" value="Submit Order"/></p>
+        <select id="shish_kabob_toppings" name="shish_kabob_toppings">
+            <option value="title">Toppings</option>
+            <option value="hummus">Hummus</option>
+            <option value="garlic_sauce">Garlic Sauce</option>
+            <option value="bell_pepper">Roasted Bell Pepper</option>
+        </select>
+        
+        <input id="quantity" type="number" step=1 min="1" name="quantity"/>
+        
+        <input id="add_to_order" type=submit name="add_to_order" value="Add to Order"/>
+        <input id="remove_from_order" type=submit name="remove_from_order" value="X"/>
+        <input id="submit_order" type=submit name="submit_order" value="Submit Order"/>
     </form> ';
 }
-
-
-
-
-
-
-
-
-
+?>
+       
+</body>
+</html>
