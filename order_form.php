@@ -18,11 +18,10 @@ include 'includes/common.php';
    
 <?php
     
-if(isset($_POST['submit_order'])) { //order was submitted    
+if(isset($_POST['submit_order'])) { //order was submitted
     
-    /*
     // ============== ATTEMPT AT SCALABLE ============== //
-    $lineItems = array() // Array to store each line item, extracted from form in its turn by while() loop below:
+    $lineItems = array(); // Array to store each line item, extracted from form in its turn by while() loop below:
     $itemNumber = 1; // This number is appended to strings to see whether the form contains those elements.
     while($_POST['item' . $itemNumber]) { // See whether there is an item whose label matches our counter
         
@@ -38,26 +37,28 @@ if(isset($_POST['submit_order'])) { //order was submitted
         $lineItems[] = new Line_Item(new $_POST[$itemSelectName](), $_POST[$itemQuantityName], $toppings); // value at select element $itemSelectName will corrrespond with Class name for a menu item. We create a new instance of that menu item as the <<item>> property of our LineItem object.
         
         $itemNumber++; // Increment by 1
-    }*/
-    
-    // Toppings arrays
-    $toppings1 = array(
-        new Topping($_POST['topping1'], $_POST['topping1_quantity'])
-    );
-    $toppings2 = array(
-        new Topping($_POST['topping2'], $_POST['topping2_quantity'])
-    );
-    
-    // Line Item array
-    $lineItems = array(
-        new Line_Item(new $_POST['item1'](), $_POST['item1_quantity'], $toppings1),
-        new Line_Item(new $_POST['item2'](), $_POST['item2_quantity'], $toppings2)
-    );
+    }
     
     // Order
     $order = new Order($lineItems);
     
     // Show information about order
+    $orderedItems = $order->lineItems;
+    
+    foreach($orderedItems as $itemKey => $orderedItem) {
+        $itemKeyListForm = $itemKey + 1;
+        echo "<p>Item {$itemKeyListForm}: {$orderedItem->item->name}</p>";
+        echo "<p>Description: {$orderedItem->item->description}</p>";
+        foreach($orderedItem->toppings as $toppingKey => $topping) {
+            $toppingKeyListForm = $toppingKey + 1;
+            echo "<p>Topping {$toppingKeyListForm}: {$topping->type}</p>";
+            echo "<p>Quantity: {$topping->quantity}</p>";
+        }
+        echo "<p>Item Price: $ {$orderedItem->price()}</p>";
+    }
+    echo "Order Subtotal: $" . $order->getSubtotal();
+    
+    /*
     // Items info
     echo "<p>Your first item: {$lineItems[0]->item->name}";
     echo "<p>Your second item: {$lineItems[1]->item->name}";
@@ -71,7 +72,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
     echo "</pre></p>";
     echo "<p>Item One Total: $" . $lineItems[0]->price() . "</p>";
     echo "<p>Item Two Total: $" . $lineItems[1]->price() . "</p>";
-    echo "<p>Subtotal: $" . $order->getSubtotal() . "</p>";
+    echo "<p>Subtotal: $" . $order->getSubtotal() . "</p>";*/
     
 }else{ //show form
     echo '
