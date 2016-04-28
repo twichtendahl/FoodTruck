@@ -18,76 +18,142 @@ include 'includes/common.php';
    
 <?php
     
-if(isset($_POST['submit_order'])) { //order was submitted
-// Dummy code assumes only one line item and item=Gyros
-    $lineItem = new Line_Item($_POST['item'], array($_POST['gyros_toppings']), $_POST['quantity']);
-    echo '<pre>' . $lineItem . '</pre>';
-    $order = new Order(array($lineItem), 'Bill');
-    echo "<p>Subtotal: {$order->getSubtotal()}<br/>Total: {$order->getTotal()}</p>";
+if(isset($_POST['submit_order'])) { //order was submitted    
+    
+    /*
+    // ============== ATTEMPT AT SCALABLE ============== //
+    $lineItems = array() // Array to store each line item, extracted from form in its turn by while() loop below:
+    $itemNumber = 1; // This number is appended to strings to see whether the form contains those elements.
+    while($_POST['item' . $itemNumber]) { // See whether there is an item whose label matches our counter
+        
+        // ============== FORM CONTROL NAMES ==============
+        $itemSelectName = 'item' . $itemNumber; // name of select element for that item
+        $itemQuantityName = $itemSelectName . '_quantity'; // name of quantity element for that item
+        $toppingSelectName = 'topping' . $itemNumber; // name of topping select element for that item
+        $toppingQuantityName = $toppingSelectName . '_quantity'; // name of quantity element for that topping
+        
+        $toppings = array(
+            new Topping($_POST[$toppingSelectName], $_POST[$toppingQuantityName])
+        );
+        $lineItems[] = new Line_Item(new $_POST[$itemSelectName](), $_POST[$itemQuantityName], $toppings); // value at select element $itemSelectName will corrrespond with Class name for a menu item. We create a new instance of that menu item as the <<item>> property of our LineItem object.
+        
+        $itemNumber++; // Increment by 1
+    }*/
+    
+    // Toppings arrays
+    $toppings1 = array(
+        new Topping($_POST['topping1'], $_POST['topping1_quantity'])
+    );
+    $toppings2 = array(
+        new Topping($_POST['topping2'], $_POST['topping2_quantity'])
+    );
+    
+    // Line Item array
+    $lineItems = array(
+        new Line_Item(new $_POST['item1'](), $_POST['item1_quantity'], $toppings1),
+        new Line_Item(new $_POST['item2'](), $_POST['item2_quantity'], $toppings2)
+    );
+    
+    // Order
+    $order = new Order($lineItems);
+    
+    // Show information about order
+    // Items info
+    echo "<p>Your first item: {$lineItems[0]->item->name}";
+    echo "<p>Your second item: {$lineItems[1]->item->name}";
+    
+    // Toppings info
+    echo "<p>Item One Toppings: <pre>";
+    echo var_dump($lineItems[0]->toppings);
+    echo "</pre></p>";
+    echo "<p>Item Two Toppings: <pre>";
+    echo var_dump($lineItems[1]->toppings);
+    echo "</pre></p>";
+    echo "<p>Item One Total: $" . $lineItems[0]->price() . "</p>";
+    echo "<p>Item Two Total: $" . $lineItems[1]->price() . "</p>";
+    echo "<p>Subtotal: $" . $order->getSubtotal() . "</p>";
     
 }else{ //show form
     echo '
     <form action="order_form.php" method="post">
-    
-        <select id="item" name="item">
-            <option value="title">Select Menu Item</option>
-            <option value="gyros">Gyros</option>
-            <option value="shawarma">Shawarma</option>
-            <option value="shish_kabob">Shish Kabob</option>
-            <option value="baba_ganoush">Baba Ganoush</option>
-            <option value="hummus_plate">Hummus Plate</option>
-            <option value="tabouleh">Tabouleh</option>
-            <option value="falafel_plate">Falafel Plate</option>
-            <option value="hot_tea">Hot Tea</option>
-            <option value="lemonade">Lemonade</option>
-            <option value="kefir">Kefir</option>
-            <option value="grape_soda">Grape Soda</option>
-            <option value="baklava">Baklava</option>
-            <option value="kunafeh">Kunafeh</option>
-            <option value="basbousa">Basbousa</option>
-        </select>
-    
-        <select id="gyros_protein" name="gyros_protein">
-            <option value="title">Protein</option>
-            <option value="lamb">Lamb</option>
-            <option value="chicken">Chicken</option>
-            <option value="falafel">Falafel</option>
-            <option value="eggplant">Eggplant</option>
-        </select>
         
-        <select id="shawarma_protein" name="shawarma_protein">
-            <option value="title">Protein</option>
-            <option value="lamb">Lamb</option>
-            <option value="chicken">Chicken</option>
-            <option value="beef">Beef</option>
-        </select>
+        <fieldset id="Item 1">
+            <legend>Item 1</legend>
+            <select id="item1" name="item1">
+                <option value="title">Select Menu Item</option>
+                <option value="Gyros">Gyros</option>
+                <option value="Shawarma">Shawarma</option>
+                <option value="Shish_Kabob">Shish Kabob</option>
+                <option value="Baba_Ganoush">Baba Ganoush</option>
+                <option value="Hummus_Plate">Hummus Plate</option>
+                <option value="Tabouleh">Tabouleh</option>
+                <option value="Falafel_Plate">Falafel Plate</option>
+                <option value="Hot_Tea">Hot Tea</option>
+                <option value="Lemonade">Lemonade</option>
+                <option value="Kefir">Kefir</option>
+                <option value="Grape_Soda">Grape Soda</option>
+                <option value="Baklava">Baklava</option>
+                <option value="Kunafeh">Kunafeh</option>
+                <option value="Basbousa">Basbousa</option>
+            </select>
+            
+            <fieldset id="item1_toppings">
+                <legend>Toppings</legend>
+                <select id="topping1" name="topping1">
+                    <option value="title">Select Topping</option>
+                    <option value="Tahini">Tahini</option>
+                    <option value="Garlic">Roast Garlic</option>
+                    <option value="Bell_Pepper">Roast Bell Pepper</option>
+                    <option value="Hummus">Hummus</option>
+                    <option value="Garlic_Sauce">Garlic Sauce</option>
+                </select>
+                <label for="topping1_quantity">Quantity: </label>
+                <input id="topping1_quantity" type="number" step=1 min="1" name="topping1_quantity"/>
+            </fieldset>
+
+            <label for="item1_quantity">Quantity: </label>
+            <input id="item1_quantity" type="number" step=1 min="1" value="1" name="item1_quantity"/>
+        </fieldset>        
         
-        <select id="gyros_toppings" name="gyros_toppings">
-            <option value="title">Toppings</option>
-            <option value="tahini">Tahini</option>
-            <option value="roasted_garlic">Roasted Garlic</option>
-            <option value="bell_pepper">Roasted Bell Pepper</option>
-        </select>
+        <fieldset id="Item 2">
+            <legend>Item 2</legend>
+            <select id="item2" name="item2">
+                <option value="title">Select Menu Item</option>
+                <option value="Gyros">Gyros</option>
+                <option value="Shawarma">Shawarma</option>
+                <option value="Shish_Kabob">Shish Kabob</option>
+                <option value="Baba_Ganoush">Baba Ganoush</option>
+                <option value="Hummus_Plate">Hummus Plate</option>
+                <option value="Tabouleh">Tabouleh</option>
+                <option value="Falafel_Plate">Falafel Plate</option>
+                <option value="Hot_Tea">Hot Tea</option>
+                <option value="Lemonade">Lemonade</option>
+                <option value="Kefir">Kefir</option>
+                <option value="Grape_Soda">Grape Soda</option>
+                <option value="Baklava">Baklava</option>
+                <option value="Kunafeh">Kunafeh</option>
+                <option value="Basbousa">Basbousa</option>
+            </select>
+            
+            <fieldset id="item2_toppings">
+                <legend>Toppings</legend>
+                <select id="topping2" name="topping2">
+                    <option value="title">Select Topping</option>
+                    <option value="Tahini">Tahini</option>
+                    <option value="Garlic">Roast Garlic</option>
+                    <option value="Bell_Pepper">Roast Bell Pepper</option>
+                    <option value="Hummus">Hummus</option>
+                    <option value="Garlic_Sauce">Garlic Sauce</option>
+                </select>
+                <label for="topping2_quantity">Quantity: </label>
+                <input id="topping2_quantity" type="number" step=1 min="1" name="topping2_quantity"/>
+            </fieldset>
+            
+            <label for="item2_quantity">Quantity: </label>
+            <input id="item2_quantity" type="number" step=1 min="1" value="1" name="item2_quantity"/>
+        </fieldset>
         
-        <select id="shawarma_toppings" name="shawarma_toppings">
-            <option value="title">Toppings</option>
-            <option value="hummus">Hummus</option>
-            <option value="roasted_garlic">Roasted Garlic</option>
-            <option value="bell_pepper">Roasted Bell Pepper</option>
-        </select>
-        
-        <select id="shish_kabob_toppings" name="shish_kabob_toppings">
-            <option value="title">Toppings</option>
-            <option value="hummus">Hummus</option>
-            <option value="garlic_sauce">Garlic Sauce</option>
-            <option value="bell_pepper">Roasted Bell Pepper</option>
-        </select>
-        
-        <input id="quantity" type="number" step=1 min="1" name="quantity"/>
-        
-        <input id="add_to_order" type=submit name="add_to_order" value="Add to Order"/>
-        <input id="remove_from_order" type=submit name="remove_from_order" value="X"/>
-        <input id="submit_order" type=submit name="submit_order" value="Submit Order"/>
+        <input id="submit_order" type="submit" name="submit_order" value="Submit Order"/>
     </form> ';
 }
 ?>

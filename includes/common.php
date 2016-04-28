@@ -2,245 +2,148 @@
 // common.php
 // Contains classes such as menu items and functions for menu logic
 
-// **************** MENU DATA CLASSES **************** //
-// Generic template for an item on the menu
-class Menu_Item {
-    
-    public $name = ''; // e.g. gyro, babaGanoush, grapeSoda
-    public $price = 0;
-    
-    function __construct($name, $price) {
-        $this->name = $name;
-        $this->$price = $price;
-    }
-}
-
-// Lookup class contains information about topping prices
-class Topping_Prices {
-    
-    // Associate the price of each topping with its name
-    public $tahini = .5;
-    public $garlic_sauce = .5;
-    public $garlic = .5;
-    public $bell_pepper = .5;
-    public $hummus = .5;
-}
-
-// Classes store data about menu items (allowable toppings, meats, etc)
-class Gyros extends Menu_Item {
-    
-    public $proteins = array('lamb', 'chicken', 'beef', 'falafel', 'eggplant');
-    public $toppings = array('tahini', 'garlic', 'bell_pepper');
-    
-    function __construct() {
-        parent::__construct('gyro', 7);
-    }
-}
-
-class Shawarma extends Menu_Item {
-    
-    public $proteins = array('lamb', 'chicken', 'beef');
-    public $toppings = array('garlic', 'bell_pepper', 'hummus');
-    
-    function __construct() {
-        parent::__construct('shawarma', 9);
-    }
-}
-
-class Shish_Kabob extends Menu_Item {
-    
-    public $proteins = array('lamb', 'chicken', 'beef');
-    public $toppings = array('garlic_sauce', 'bell_pepper', 'hummus');
-    
-    function __construct() {
-        parent::__construct('shish_kabob', 8);
-    }
-}
-
-class Baba_Ganoush extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('baba_ganoush', 5);
-    }
-}
-
-class Hummus_Plate extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('hummus_plate', 4);
-    }
-}
-
-class Tabouleh extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('tabouleh', 3);
-    }
-}
-
-class Falafel_Plate extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('falafel_plate', 5);
-    }
-}
-
-class Baklava extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('baklava', 4.25);
-    }
-}
-
-class Kunafeh extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('kunafeh', 4.25);
-    }
-}
-
-class Basbousa extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('baba_ganoush', 5);
-    }
-}
-
-class Hot_Tea extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('hot_tea', 2.25);
-    }
-}
-
-class Lemonade extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('lemonade', 2.25);
-    }
-}
-
-class Kefir extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('kefir', 2.50);
-    }
-}
-
-class Grape_Soda extends Menu_Item {
-    
-    function __construct() {
-        parent::__construct('grape_soda', 2.50);
-    }
-}
-
-// **************** ORDER CLASSES **************** //
-// Object represents single line item on an order receipt
-class Line_Item {
-    
-    public $item = ''; // Name of menu item
-    public $toppings = array(); // Array of toppings on that item
-    public $quantity = 0; // Number of this item/topping combination in context of order
-    
-    function __construct($item, $toppings, $quantity) {
-        $this->item = $item;
-        $this->toppings = $toppings;
-        $this->quantity = $quantity;
-    }
-    
-    function __toString() {// styled to fit a receipt
-        return $this->quantity . ' ' . strtoupper($this->item) . ' | ' . $this->price() . PHP_EOL . '  ' . implode(PHP_EOL . '  ', $this->toppings);
-    }
-    
-    function price() {// determine the price of this line item by combining the item price with the price of each topping, 
-                      // then multiply by quantity
-        
-        // get the price of the item
-        $itemName = ucfirst($this->item); // Capitalize first letter of $item so it matches the data class name for that item        
-        $itemAsAnObject = new $itemName(); // Create an object with that name so its price can be accessed
-        $lineItemPrice = $itemAsAnObject->price; // Initialize $price as the price of that item
-        
-        // add the price of each topping in $toppings property to price of item
-        // name is lower case topping names with underscores, convert these to
-        // uppercase without underscores for Topping_Price lookup
-        foreach($this->toppings as $name) {
-            $toppingPrices = new Topping_Prices();
-            $lineItemPrice += $toppingPrices->name;
-        }
-        
-        // Multiply the price of one item with associated toppings to the correct number of that item
-        $lineItemPrice = $lineItemPrice * $this->quantity;
-        return $lineItemPrice;
-    }
-}
+// Instantiate class that matches value of menu item field
+// Use that class' properties to associate a price with an order
 
 class Order {
     
-    // constant tax rate for local jurisdiction
-    const TAXRATE = .095;
+    public $lineItems = array(); // This property is an array of the line items in the order
     
-    // information for particular order
-    public $lineItems = array();
-    public $customerName = '';
-    
-    function __construct($lineItems, $customerName) {
-        $this->lineItems = $lineItems;
-        $this->customerName = $customerName;
+    function __construct($lineItems) {// constructor takes an array of line items for that order
+        $this->lineItems = $lineItems;    
     }
     
-    function getSubtotal() { // returns the subtotal of an order
-        // loop through lineItems and add the price of each to the subtotal
-        $subtotal = 0;
+    function getSubtotal() {
+        
+        $subtotal = 0;        
+        // loop through the array of line items in the order, adding the price of each to the subtotal
         foreach($this->lineItems as $lineItem) {
             $subtotal += $lineItem->price();
         }
         return $subtotal;
-    }
-    
-    function getTotal() { // returns the total after tax
-        return $this->getSubtotal() * (1 + TAXRATE);
+        
     }
 }
 
-/*
-Gyros ($7)
-Choose meat:
-Lamb
-Chicken
-Beef
-Falafel (vegetarian)
-Eggplant (vegetarian)
-Extra Toppings ($.50 each)
-Tahini sauce
-Roast garlic
-Roast bell pepper
+class Line_Item {
+    
+    public $item = (Item); // This property specifies the type of menu item. It is an object associated with that item.
+    public $quantity = 0; // This property specifies the quantity of that item.
+    public $toppings = array(); // Array of Topping objects, which associate topping types with topping quantities
+    
+    function __construct($item, $quantity, $toppings) {
+        $this->item = $item;
+        $this->quantity = $quantity;
+        $this->toppings = $toppings;
+    }
+    
+    function price() { // Function returns the price of just one line item
+        
+        $price = $this->item->price * $this->quantity; // Initialize price variable as cost of single item times quantity of that item
+        foreach($this->toppings as $topping) {
+            $price += .5 * $topping->quantity; // All toppings cost 50c for now; add that amount for each topping X its quantity
+        }
+        return $price;
+    }
+}
 
-Shawarma Plate ($9)
-Choose meat:
-Lamb
-Chicken
-Beef
-Extra Toppings ($.50 each)
-Roast garlic
-Roast bell pepper
-Hummus
+class Topping {
+    
+    public $type = '';
+    public $quantity = 0;
+    
+    function __construct($type, $quantity) {
+        $this->type = $type;
+        $this->quantity = $quantity;
+    }
+}
 
-Shish Kabob ($8)
-Choose meat:
-Lamb
-Chicken
-Beef
-Extra Toppings ($.50 each)
-Garlic Sauce
-Roast bell pepper
-Hummus
+class Item {
+    public $name = '';
+    public $description = '';
+    public $price = 0;
+}
 
-Side Dishes
-Baba Ganoush 5, Hummus Plate 4, Tabouleh 3, Falafel Plate 5
+class Gyros {    
+    public $name = 'Gyros';
+    public $description = 'Meditteranean flatbread sandwich with grilled meat or falafel and mixed fresh vegetables';
+    public $price = 7;
+}
 
-Desserts
-Baklava, Kunafeh, Basbousa
+class Shawarma {    
+    public $name = 'Shawarma';
+    public $description = 'Grilled meat flavored with Egyptian spices, served with vegetables';
+    public $price = 9;
+}
 
-Beverages
-Hot Tea, Lemonade, Kefir, Grape Soda
-*/
+class Shish_Kabob {    
+    public $name = 'Shish Kabob';
+    public $description = 'Skewered grilled meats with Egyptian seasonings';
+    public $price = 8;
+}
+
+class Baba_Ganoush {    
+    public $name = 'Baba Ganoush';
+    public $description = 'Traditional Mediterranean favorite featuring seared eggplant, served with flatbread';
+    public $price = 7;
+}
+
+class Hummus_Plate {    
+    public $name = 'Hummus Plate';
+    public $description = 'Hearty combination of garbanzo beans, olive oil, and seasonings, served with warm pita and vegetables';
+    public $price = 4;
+}
+
+class Tabouleh {    
+    public $name = 'Tabouleh';
+    public $description = 'Egyptian salad featuring wheat bulghur, citrus, and herbs';
+    public $price = 3;
+}
+
+class Falafel_Plate {    
+    public $name = 'Falafel Plate';
+    public $description = 'Fried dish featuring pureed garbanzo beans and spices, served with tahini sauce and grilled vegetables';
+    public $price = 6;
+}
+
+class Hot_Tea {    
+    public $name = 'Hot Tea';
+    public $description = 'Traditional Egyptian treat, with sugar, mint, and milk on the side';
+    public $price = 2.25;
+}
+
+class Lemonade {    
+    public $name = 'Lemonade';
+    public $description = 'Fresh squeezed in house!';
+    public $price = 2.75;
+}
+
+class Kefir {    
+    public $name = 'kefir';
+    public $description = 'Smooth dairy drink with a yogurt-like flavor';
+    public $price = 3.25;
+}
+
+class Grape_Soda {    
+    public $name = 'Grape Soda';
+    public $description = 'Favorite soft drink of Egypt, with whole peeled grapes';
+    public $price = 2.5;
+}
+
+class Baklava {    
+    public $name = 'Baklava';
+    public $description = 'Mediterranean desert with sweet, rich pastry layered with nuts and honey';
+    public $price = 4.5;
+}
+
+class Kunafeh {    
+    public $name = 'Kunafeh';
+    public $description = 'Traditional Egyptian cheese pie';
+    public $price = 6.5;
+}
+
+class Basbousa {    
+    public $name = 'Basbousa';
+    public $description = 'Middle-eastern egg cake with pistacchio butter';
+    public $price = 5.5;
+}
