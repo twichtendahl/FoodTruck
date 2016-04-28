@@ -48,7 +48,7 @@ class Line_Item {
         
         $price = $this->item->price * $this->quantity; // Initialize price variable as cost of single item times quantity of that item
         foreach($this->toppings as $topping) {
-            $price += .5 * $topping->quantity; // All toppings cost 50c for now; add that amount for each topping X its quantity
+            $price += $topping->price(); // Inquire topping object about its price
         }
         return $price;
     }
@@ -56,12 +56,16 @@ class Line_Item {
 
 class Topping {
     
-    public $type = '';
+    public $type = (Item);
     public $quantity = 0;
     
     function __construct($type, $quantity) {
         $this->type = $type;
         $this->quantity = $quantity;
+    }
+    
+    function price() {
+        return $this->type->price * $this->quantity;
     }
 }
 

@@ -32,7 +32,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
         $toppingQuantityName = $toppingSelectName . '_quantity'; // name of quantity element for that topping
         
         $toppings = array(
-            new Topping($_POST[$toppingSelectName], $_POST[$toppingQuantityName])
+            new Topping(new $_POST[$toppingSelectName](), $_POST[$toppingQuantityName])
         );
         $lineItems[] = new Line_Item(new $_POST[$itemSelectName](), $_POST[$itemQuantityName], $toppings); // value at select element $itemSelectName will corrrespond with Class name for a menu item. We create a new instance of that menu item as the <<item>> property of our LineItem object.
         
@@ -51,7 +51,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
         echo "<p>Description: {$orderedItem->item->description}</p>";
         foreach($orderedItem->toppings as $toppingKey => $topping) {
             $toppingKeyListForm = $toppingKey + 1;
-            echo "<p>Topping {$toppingKeyListForm}: {$topping->type}</p>";
+            echo "<p>Topping {$toppingKeyListForm}: {$topping->type->name}</p>";
             echo "<p>Quantity: {$topping->quantity}</p>";
         }
         echo "<p>Item Price: $ {$orderedItem->price()}</p>";
