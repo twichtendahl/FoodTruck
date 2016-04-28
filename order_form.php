@@ -57,6 +57,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
         echo "<p>Item Price: $ {$orderedItem->price()}</p>";
     }
     echo "Order Subtotal: $" . $order->getSubtotal();
+    echo "Order Total: $" . $order->getTotal();
     
     /*
     // Items info
@@ -78,7 +79,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
     echo '
     <form action="order_form.php" method="post">
         
-        <fieldset id="Item 1">
+        <fieldset id="order_item1">
             <legend>Item 1</legend>
             <select id="item1" name="item1">
                 <option value="title">Select Menu Item</option>
@@ -116,7 +117,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
             <input id="item1_quantity" type="number" step=1 min="1" value="1" name="item1_quantity"/>
         </fieldset>        
         
-        <fieldset id="Item 2">
+        <fieldset id="order_item2">
             <legend>Item 2</legend>
             <select id="item2" name="item2">
                 <option value="title">Select Menu Item</option>

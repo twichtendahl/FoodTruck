@@ -8,6 +8,7 @@
 class Order {
     
     public $lineItems = array(); // This property is an array of the line items in the order
+    public $tax = .095;
     
     function __construct($lineItems) {// constructor takes an array of line items for that order
         $this->lineItems = $lineItems;    
@@ -21,6 +22,12 @@ class Order {
             $subtotal += $lineItem->price();
         }
         return $subtotal;
+        
+    }
+    
+    function getTotal() {
+        
+        return $this->getSubtotal() * (1 + $this->tax);
         
     }
 }
@@ -146,4 +153,35 @@ class Basbousa {
     public $name = 'Basbousa';
     public $description = 'Middle-eastern egg cake with pistacchio butter';
     public $price = 5.5;
+}
+
+// Topping items
+class Tahini {
+    public $name = 'Tahini';
+    public $description = 'Cool sauce of toasted sesame';
+    public $price = 1;
+}
+
+class Garlic {
+    public $name = 'Roast Garlic';
+    public $description = 'Whole cloves of garlic roasted in a brick oven';
+    public $price = .5;
+}
+
+class Bell_Pepper {
+    public $name = 'Roast Bell Pepper';
+    public $description = 'Red bell pepper, roasted in a brick oven then sliced';
+    public $price = 1;
+}
+
+class Garlic_Sauce {
+    public $name = 'Garlic Sauce';
+    public $description = 'Savory thin sauce of garlic and Egyptian seasonings';
+    public $price = 1.5;
+}
+
+class Hummus {
+    public $name = 'Hummus';
+    public $description = 'Hearty combination of garbanzo beans, olive oil, and seasonings';
+    public $price = 1.5;
 }
