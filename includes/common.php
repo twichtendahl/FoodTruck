@@ -12,8 +12,7 @@ class Order {
     
     /**
      * Order constructor from an array of line items
-     * @param array $lineItems
-     * @return float $subtotal
+     * @param array $lineItems constructs order from submitted choices
     */
     function __construct($lineItems) {// constructor takes an array of line items for that order
         $this->lineItems = $lineItems;    
@@ -21,7 +20,7 @@ class Order {
     
     /**
      * Subtotal calculator
-     * @return float $subtotal
+     * @return float $subtotal subtotal for order price
     */
     function getSubtotal() {
         
@@ -36,7 +35,7 @@ class Order {
     
     /**
      * Calculates total including tax
-     * @return float $this->getSubtotal() * (1 + $this->tax)
+     * @return float $this->getSubtotal() * (1 + $this->tax) - total price for order
     */
     function getTotal() {
         
@@ -53,9 +52,9 @@ class Line_Item {
     
     /**
      * Constructs an order from submitted values
-     * @param Item $item
-     * @param int $quantity
-     * @param array $toppings
+     * @param Item $item ordered item
+     * @param int $quantity quantity selected
+     * @param array $toppings ordered toppings
     */
     function __construct($item, $quantity, $toppings) {
         $this->item = $item;
@@ -65,7 +64,7 @@ class Line_Item {
     
     /**
      * Calculates the price of a line item
-     * @return float $price
+     * @return float $price price of one line item
     */
     function price() { // Function returns the price of just one line item
         
@@ -85,8 +84,8 @@ class Topping {
     
     /**
      * Topping constructor
-     * @param Item $type
-     * @param int $quantity
+     * @param Item $type type ordered
+     * @param int $quantity quantity selected
     */
     function __construct($type, $quantity) {
         $this->type = $type;
@@ -95,7 +94,7 @@ class Topping {
     
     /**
      * Calculates topping price
-     * @return float $this->type->price * $this->quantity
+     * @return float $this->type->price * $this->quantity - price of toppings
     */
     function price() {
         return $this->type->price * $this->quantity;
