@@ -2,9 +2,10 @@
 // common.php
 // Contains classes such as menu items and functions for menu logic
 
-// Instantiate class that matches value of menu item field
-// Use that class' properties to associate a price with an order
-
+/**
+ * Instantiates class that matches value of menu item field
+ * Uses that class' properties to associate a price with an order
+*/
 class Order {
     
     public $lineItems = array(); // This property is an array of the line items in the order
@@ -44,6 +45,10 @@ class Order {
     }
 }
 
+/**
+ * Builds line items based on item, quantity
+ * and toppings
+*/
 class Line_Item {
     
     public $item = (Item); // This property specifies the type of menu item. It is an object associated with that item.
@@ -76,6 +81,10 @@ class Line_Item {
     }
 }
 
+/**
+ * Builds order for topping(s) based on type and
+ * quantity
+*/
 class Topping {
     
     //Initialize item and quantity
@@ -101,121 +110,202 @@ class Topping {
     }
 }
 
+/**
+ * Builds an item order based on name, 
+ * description and price
+*/
 class Item {
     public $name = '';
     public $description = '';
     public $price = 0;
 }
 
+/**
+ * Builds an order for Gyros based on name, 
+ * description and price
+*/
 class Gyros {    
     public $name = 'Gyros';
     public $description = 'Meditteranean flatbread sandwich with grilled meat or falafel and mixed fresh vegetables';
     public $price = 7;
 }
 
+/**
+ * Builds an order for Shawarma based on name, 
+ * description and price
+*/
 class Shawarma {    
     public $name = 'Shawarma';
     public $description = 'Grilled meat flavored with Egyptian spices, served with vegetables';
     public $price = 9;
 }
 
+/**
+ * Builds an order for Shish Kabob based on name, 
+ * description and price
+*/
 class Shish_Kabob {    
     public $name = 'Shish Kabob';
     public $description = 'Skewered grilled meats with Egyptian seasonings';
     public $price = 8;
 }
 
+/**
+ * Builds an order for Baba Ganoush based on name, 
+ * description and price
+*/
 class Baba_Ganoush {    
     public $name = 'Baba Ganoush';
     public $description = 'Traditional Mediterranean favorite featuring seared eggplant, served with flatbread';
     public $price = 7;
 }
 
+/**
+ * Builds an order for Hummus Plate based on name, 
+ * description and price
+*/
 class Hummus_Plate {    
     public $name = 'Hummus Plate';
     public $description = 'Hearty combination of garbanzo beans, olive oil, and seasonings, served with warm pita and vegetables';
     public $price = 4;
 }
 
+/**
+ * Builds an order for Tabouleh based on name, 
+ * description and price
+*/
 class Tabouleh {    
     public $name = 'Tabouleh';
     public $description = 'Egyptian salad featuring wheat bulghur, citrus, and herbs';
     public $price = 3;
 }
 
+/**
+ * Builds an order for Falafel Plate based on name, 
+ * description and price
+*/
 class Falafel_Plate {    
     public $name = 'Falafel Plate';
     public $description = 'Fried dish featuring pureed garbanzo beans and spices, served with tahini sauce and grilled vegetables';
     public $price = 6;
 }
 
+/**
+ * Builds an order for Hot Tea based on name, 
+ * description and price
+*/
 class Hot_Tea {    
     public $name = 'Hot Tea';
     public $description = 'Traditional Egyptian treat, with sugar, mint, and milk on the side';
     public $price = 2.25;
 }
 
+/**
+ * Builds an order for Lemonade based on name, 
+ * description and price
+*/
 class Lemonade {    
     public $name = 'Lemonade';
     public $description = 'Fresh squeezed in house!';
     public $price = 2.75;
 }
 
+/**
+ * Builds an order for Kefir based on name, 
+ * description and price
+*/
 class Kefir {    
     public $name = 'kefir';
     public $description = 'Smooth dairy drink with a yogurt-like flavor';
     public $price = 3.25;
 }
 
+/**
+ * Builds an order for Grape Soda based on name, 
+ * description and price
+*/
 class Grape_Soda {    
     public $name = 'Grape Soda';
     public $description = 'Favorite soft drink of Egypt, with whole peeled grapes';
     public $price = 2.5;
 }
 
+/**
+ * Builds an order for Baklava based on name, 
+ * description and price
+*/
 class Baklava {    
     public $name = 'Baklava';
     public $description = 'Mediterranean desert with sweet, rich pastry layered with nuts and honey';
     public $price = 4.5;
 }
 
+/**
+ * Builds an order for Kunafeh based on name, 
+ * description and price
+*/
 class Kunafeh {    
     public $name = 'Kunafeh';
     public $description = 'Traditional Egyptian cheese pie';
     public $price = 6.5;
 }
 
+/**
+ * Builds an order for Basbousa based on name, 
+ * description and price
+*/
 class Basbousa {    
     public $name = 'Basbousa';
     public $description = 'Middle-eastern egg cake with pistacchio butter';
     public $price = 5.5;
 }
 
-// Topping items
+// TOPPING ITEMS
+
+/**
+ * Builds an order for Tahini based on name, 
+ * description and price
+*/
 class Tahini {
     public $name = 'Tahini';
     public $description = 'Cool sauce of toasted sesame';
     public $price = 1;
 }
 
+/**
+ * Builds an order for Roast Garlic based on name, 
+ * description and price
+*/
 class Garlic {
     public $name = 'Roast Garlic';
     public $description = 'Whole cloves of garlic roasted in a brick oven';
     public $price = .5;
 }
 
+/**
+ * Builds an order for Bell Pepper based on name, 
+ * description and price
+*/
 class Bell_Pepper {
     public $name = 'Roast Bell Pepper';
     public $description = 'Red bell pepper, roasted in a brick oven then sliced';
     public $price = 1;
 }
 
+/**
+ * Builds an order for Garlic Sauce based on name, 
+ * description and price
+*/
 class Garlic_Sauce {
     public $name = 'Garlic Sauce';
     public $description = 'Savory thin sauce of garlic and Egyptian seasonings';
     public $price = 1.5;
 }
 
+/**
+ * Builds an order for Hummus based on name, 
+ * description and price
+*/
 class Hummus {
     public $name = 'Hummus';
     public $description = 'Hearty combination of garbanzo beans, olive oil, and seasonings';
