@@ -18,6 +18,7 @@ include 'includes/common.php';
    
 <?php
     
+//Display order information if submitted, otherwise display the order form
 if(isset($_POST['submit_order'])) { //order was submitted
     
     // ============== ATTEMPT AT SCALABLE ============== //
@@ -31,11 +32,13 @@ if(isset($_POST['submit_order'])) { //order was submitted
         $toppingSelectName = 'topping' . $itemNumber; // name of topping select element for that item
         $toppingQuantityName = $toppingSelectName . '_quantity'; // name of quantity element for that topping
         
+        //Create arrays for toppings and line items
         $toppings = array(
             new Topping(new $_POST[$toppingSelectName](), $_POST[$toppingQuantityName])
         );
         $lineItems[] = new Line_Item(new $_POST[$itemSelectName](), $_POST[$itemQuantityName], $toppings); // value at select element $itemSelectName will corrrespond with Class name for a menu item. We create a new instance of that menu item as the <<item>> property of our LineItem object.
         
+        //Increment by 1 to offset zero-indexing
         $itemNumber++; // Increment by 1
     }
     
@@ -45,6 +48,7 @@ if(isset($_POST['submit_order'])) { //order was submitted
     // Show information about order
     $orderedItems = $order->lineItems;
     
+    //Echo the order information
     foreach($orderedItems as $itemKey => $orderedItem) {
         $itemKeyListForm = $itemKey + 1;
         echo "<p>Item {$itemKeyListForm}: {$orderedItem->item->name}</p>";
