@@ -10,10 +10,19 @@ class Order {
     public $lineItems = array(); // This property is an array of the line items in the order
     public $tax = .095;
     
+    /**
+     * Order constructor from an array of line items
+     * @param array $lineItems
+     * @return float $subtotal
+    */
     function __construct($lineItems) {// constructor takes an array of line items for that order
         $this->lineItems = $lineItems;    
     }
     
+    /**
+     * Subtotal calculator
+     * @return float $subtotal
+    */
     function getSubtotal() {
         
         $subtotal = 0;        
@@ -25,6 +34,10 @@ class Order {
         
     }
     
+    /**
+     * Calculates total including tax
+     * @return float $this->getSubtotal() * (1 + $this->tax)
+    */
     function getTotal() {
         
         return $this->getSubtotal() * (1 + $this->tax);
@@ -38,12 +51,22 @@ class Line_Item {
     public $quantity = 0; // This property specifies the quantity of that item.
     public $toppings = array(); // Array of Topping objects, which associate topping types with topping quantities
     
+    /**
+     * Constructs an order from submitted values
+     * @param Item $item
+     * @param int $quantity
+     * @param array $toppings
+    */
     function __construct($item, $quantity, $toppings) {
         $this->item = $item;
         $this->quantity = $quantity;
         $this->toppings = $toppings;
     }
     
+    /**
+     * Calculates the price of a line item
+     * @return float $price
+    */
     function price() { // Function returns the price of just one line item
         
         $price = $this->item->price * $this->quantity; // Initialize price variable as cost of single item times quantity of that item
@@ -56,14 +79,24 @@ class Line_Item {
 
 class Topping {
     
-    public $type = (Item);
-    public $quantity = 0;
+    //Initialize item and quantity
+    public $type = (Item); 
+    public $quantity = 0; 
     
+    /**
+     * Topping constructor
+     * @param Item $type
+     * @param int $quantity
+    */
     function __construct($type, $quantity) {
         $this->type = $type;
         $this->quantity = $quantity;
     }
     
+    /**
+     * Calculates topping price
+     * @return float $this->type->price * $this->quantity
+    */
     function price() {
         return $this->type->price * $this->quantity;
     }
